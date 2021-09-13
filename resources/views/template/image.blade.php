@@ -29,7 +29,7 @@
     <div class="konten">
         <img src="{{asset('storage/image/'.$img)}}" alt="" width="1000px", height="700px">        
         <div class="text" width="1080px">            
-            UM = {{ number_format($qty/100*$payment, 0, ',', '.') }} KG x Rp {{ number_format($price, 0, ',', '.') }} = Rp {{ number_format($qty/100 * $payment * $price, 0, ',', '.') }}
+            UM = {{ number_format(($qty * $payment)/100, 0, ',', '.') }} kg x Rp {{ number_format($price, 0, ',', '.') }} = Rp {{ number_format(($qty * $payment * $price)/100, 0, ',', '.') }}
         </div>
     </div>
 

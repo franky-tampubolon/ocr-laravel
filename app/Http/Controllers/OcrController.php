@@ -48,23 +48,30 @@ class OcrController extends Controller
         // echo $text;
         
 
-        $qty = Str::between($text, 'COMMODITY/QTY', 'KG');
+        $qty = Str::between($text, 'QTY', 'KG');
         $qty = (int) trim(Str::replace('.', '', Str::after($qty, '/')));
 
-        $payment = Str::after($text, 'PAYMENT ~ 1');
+        $payment = Str::after($text, 'PAYMENT');
         $payment = (int) trim(Str::before($payment, '%'));
         
         $deal_price = Str::after($text, 'DEAL PRICE');
         $deal_price = (int) trim(Str::replace('.', '', Str::before($deal_price, 'IDR')));
 
         // dd($qty, $payment, $deal_price);
-        $hitung_total = (int) $payment * $qty * $deal_price;
+        $hitung_total = (int) ($payment * $qty * $deal_price)/100;
 
         if( $total === $hitung_total){
             $price = $deal_price;
-        }else{
-            $incl_vat = Str::after($text, '(INCL VAT)');
-            $price = (int) trim(Str::replace('.', '', Str::before($incl_vat, 'IDR')));
+        }
+
+        $incl_vat = Str::after($text, '(INCL VAT)');
+        $incl_vat = (int) trim(Str::replace('.', '', Str::before($incl_vat, 'IDR')));
+
+        $total_incl_vat = (int) ($payment * $qty * $incl_vat)/100;
+        // dd($total, $hitung_total, $total_incl_vat);
+
+        if($total === $total_incl_vat){            
+            $price = $incl_vat;
         }
 
         return view('template.image', [
