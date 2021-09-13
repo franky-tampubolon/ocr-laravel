@@ -44,24 +44,28 @@ class OcrController extends Controller
         $image = base_path("public/storage/image/".$nama_file) ;
 
         $text = (new TesseractOCR($image))->run();
+        // dd($text);
         // echo $text;
+        
 
+        $qty = Str::between($text, 'COMMODITY/QTY', 'KG');
+        $qty = (int) trim(Str::replace('.', '', Str::after($qty, '/')));
+
+        $payment = Str::after($text, 'PAYMENT ~ 1');
+        $payment = (int) trim(Str::before($payment, '%'));
+        
         $deal_price = Str::after($text, 'DEAL PRICE');
         $deal_price = (int) trim(Str::replace('.', '', Str::before($deal_price, 'IDR')));
 
-        if($total === $deal_price){
+        // dd($qty, $payment, $deal_price);
+        $hitung_total = (int) $payment * $qty * $deal_price;
+
+        if( $total === $hitung_total){
             $price = $deal_price;
         }else{
             $incl_vat = Str::after($text, '(INCL VAT)');
             $price = (int) trim(Str::replace('.', '', Str::before($incl_vat, 'IDR')));
         }
-
-        $qty = Str::between($text, 'COMMODITY/QTY', 'KG');
-        $qty = (int) trim(Str::replace('.', '', Str::after($qty, '/')));
-
-        $payment = Str::after($text, 'PAYMENT');
-        $payment = (float) trim(Str::before($payment, '%'));
-        
 
         return view('template.image', [
             'price' => $price,
