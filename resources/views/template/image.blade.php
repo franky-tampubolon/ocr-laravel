@@ -26,10 +26,26 @@
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Deal-Slip</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                    <a class="nav-link" href="{{route('dealslip.index')}}">Upload File</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="konten">
-        <img src="{{asset('storage/image/'.$img)}}" alt="" width="1000px", height="700px">        
-        <div class="text" width="1080px">            
-            UM = {{ number_format(($qty * $payment)/100, 0, ',', '.') }} kg x Rp {{ number_format($price, 0, ',', '.') }} = Rp {{ number_format(($qty * $payment * $price)/100, 0, ',', '.') }}
+        <img src="{{$img}}" alt="" width="1000px", height="700px">
+        <div class="text" width="1080px">
+            UM = {{ number_format(($qty * $payment)/100, 0, ',', '.') }} kg x Rp {{ number_format($price, 1, ',', '.') }} = Rp {{ number_format(($qty * $payment * $price)/100, 0, ',', '.') }}
         </div>
     </div>
 

@@ -16,7 +16,7 @@
                     <div class="card-body">
                         <h4 style="text-align:center">Cara menggunakan : </h4>
                         <ol>
-                            <li>Upload deal slip dalam bentuk gambar (png/jpg/jpeg)</li>
+                            <li>Upload deal slip dalam bentuk gambar atau pdf (pdf/png/jpg/jpeg)</li>
                             <li>Masukkan nominal total bayar ke bagian input total</li>
                             <li>Klik Upload untuk membuat pdf deal slip dengan tambahan tulisan UM</li>
                             <li>Setelah itu, kamu akan dibawa ke halaman baru.</li>
@@ -26,11 +26,11 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{route('ocr.store')}}" method="POST" enctype="multipart/form-data">
+                        <form id="form" action="{{route('ocr.store')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
-                                <label for="image">Upload gambar</label>
-                                <input type="file" class="form-control" name="image" id="image">
+                                <label for="file">Upload gambar</label>
+                                <input type="file" class="form-control" name="file" id="file">
                             </div>
                             <div class="form-group">
                                 <label for="total">Total</label>
@@ -43,6 +43,8 @@
             </div>
         </div>
     </div>
+
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
