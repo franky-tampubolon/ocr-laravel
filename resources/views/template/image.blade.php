@@ -38,6 +38,9 @@
                     <li class="nav-item active">
                     <a class="nav-link" href="{{route('dealslip.index')}}">Upload File</a>
                     </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{route('excel.index')}}">Rekap</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -45,7 +48,7 @@
     <div class="konten">
         <img src="{{$img}}" alt="" width="1000px", height="700px">
         <div class="text" width="1080px">
-            UM = {{ number_format(($qty * $payment)/100, 0, ',', '.') }} kg x Rp {{ number_format($price, 1, ',', '.') }} = Rp {{ number_format(($qty * $payment * $price)/100, 0, ',', '.') }}
+            UM = {{ number_format(($qty * $payment)/100, 0, ',', '.') }} kg x Rp {{ number_format($price, 2, ',', '.') }} = Rp {{ number_format(($qty * $payment * $price)/100, 0, ',', '.') }}
         </div>
     </div>
 

@@ -20,7 +20,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="{{route('dealslip.index')}}">Upload File</a>
+              <a class="nav-link" href="{{route('dealslip.index')}}">Deal Slip</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="{{route('excel.index')}}">Rekap</a>
             </li>
           </ul>
         </div>

@@ -39,6 +39,8 @@ class DealslipController extends Controller
         // olah jadi text
         $text = (new TesseractOCR($image))->run();
 
+
+
         // get quantity and make it to integer
         $qty = Str::between($text, 'QTY', 'KG');
         $qty = (int) trim(Str::replace('.', '', Str::after($qty, '/')));
