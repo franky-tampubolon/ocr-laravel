@@ -20,36 +20,49 @@ class ExcelController extends Controller
 
     public function import(Request $request)
     {
+        $data = [];
         $jenis = $request->jenis_rekap;
         // dd($jenis);
         if($jenis == 'kebun'){
             $datas = Excel::toArray(new KebunImport, $request->file('excel'));
+            $new = Arr::except($datas[0], [0]);
+            $collections = collect($new)->groupBy([0, 23]);
+            foreach($collections as $key => $collect){
+                $values = [];
+                foreach($collect as $a => $val){
+                    $values[] = [
+                        'btd_number' => $a,
+                        'amount' => (int) Str::after($val[count($val)-1][10], '-'),
+                        'due_date' => Carbon::parse(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($val[0][8]))->format('d/n/Y')
+                    ];
+                }
+                $data[] = [
+                    'company_code' => $key,
+                    'data' => $values,
+                    'jumlah_data' => count($values),
+                    'jenis_rekap' => $jenis
+                ];
+            }
         }else{
             $datas = Excel::toArray(new RekapImport, $request->file('excel'));
+            $new = Arr::except($datas[0], [0]);
+            $collections = collect($new)->groupBy([23]);
             $jenis = 'UM/PELUNASAN/PPN CPO';
-        }
-        // dd($request->all());
-        
-        $new = Arr::except($datas[0], [0]);
-        $collections = collect($new)->groupBy([0, 23]);
-        // dd($collections);
-        $data = [];
-        foreach($collections as $key => $collect){
             $values = [];
-            foreach($collect as $a => $val){
+            foreach($collections as $key => $collect){
                 $values[] = [
-                    'btd_number' => $a,
-                    'amount' => (int) Str::after($val[count($val)-1][10], '-'),
-                    'due_date' => Carbon::parse(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($val[0][8]))->format('d/n/Y')
+                    'btd_number' => $key,
+                    'amount' => (int) Str::after($collect[count($collect)-1][10], '-'),
+                    'due_date' => Carbon::parse(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($collect[0][8]))->format('d/n/Y'),
                 ];
             }
             $data[] = [
-                'company_code' => $key,
+                'company_code' => 0,
                 'data' => $values,
                 'jumlah_data' => count($values),
                 'jenis_rekap' => $jenis
             ];
-        }
+        }  
         // dd($data);
         $name_file = $request->file('excel')->getClientOriginalName();
         // $name_file = Str::after($name_file, 'TINA_');

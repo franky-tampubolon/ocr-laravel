@@ -15,6 +15,7 @@ class RekapExport implements WithMultipleSheets
     protected $jenis_rekap;
     public function __construct(array $data, string $jenis_rekap)
     {
+        // dd($data);
         $this->data = $data;
         $this->jenis_rekap = $jenis_rekap;
     }
@@ -74,8 +75,12 @@ class RekapExport implements WithMultipleSheets
     {
         $sheets = [];
 
-        foreach($this->data as $key => $data){
-            $sheets[] = new RekapMultiSheet($data['company_code'], $data['data'], $data['jumlah_data'], $this->jenis_rekap);
+        if($this->jenis_rekap === 'kebun'){
+            foreach($this->data as $key => $data){
+                    $sheets[] = new RekapMultiSheet($data['company_code'], $data['data'], $data['jumlah_data'], $this->jenis_rekap);
+            }
+        }else{
+            $sheets[] = new RekapMultiSheet($this->data[0]['company_code'], $this->data[0]['data'], $this->data[0]['jumlah_data'], $this->jenis_rekap);
         }
         return $sheets;
     }

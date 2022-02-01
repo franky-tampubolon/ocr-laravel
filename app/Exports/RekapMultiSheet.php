@@ -74,6 +74,10 @@ class RekapMultiSheet implements FromView, WithStyles, WithTitle
     public function title(): string
     {
 
-        return 'company code_'.$this->company_code;
+        if($this->company_code === 0){
+            return date('dmY');
+        }else{
+            return 'company code_'.$this->company_code;
+        }
     }
 }
