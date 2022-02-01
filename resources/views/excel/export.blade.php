@@ -1,5 +1,5 @@
 <div class="title">
-    <h5>UM/PELUNASAN/PPN CPO</h5>
+    <h5>{{$jenis_rekap}}</h5>
     <p>{{date('d/m/Y')}}</p>
 </div>
 <table>

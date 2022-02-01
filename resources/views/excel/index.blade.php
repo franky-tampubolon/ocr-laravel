@@ -35,6 +35,7 @@
                     <div class="card-body">
                         <h4 style="text-align:center">Cara menggunakan : </h4>
                         <ol>
+                            <li>Pilih jenis rekap yang akan anda upload (kebun atau cpo)</li>
                             <li>Upload file robot dalam bentuk excel</li>
                             <li>Klik Upload. Tunggu sebentar, sistem akan mendownload hasil dalam bentuk excel</li>
                         </ol>
@@ -44,6 +45,13 @@
                     <div class="card-body">
                         <form id="form" action="{{route('excel.import')}}" method="POST" enctype="multipart/form-data">
                             @csrf
+                            <div class="form-group">
+                                <label for="jenis_rekap" class="jenis_rekap">Pilih Jenis rekap</label>
+                                <select class="form-control" id="jenis_rekap" name="jenis_rekap">
+                                    <option value="kebun">Rekap Kebun</option>
+                                    <option value="cpo">Rekap CPO</option>
+                                </select>
+                            </div>
                             <div class="form-group">
                                 <label for="file">Upload Excel</label>
                                 <input type="file" class="form-control" name="excel" id="excel">

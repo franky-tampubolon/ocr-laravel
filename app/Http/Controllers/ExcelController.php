@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RekapExport;
+use App\Imports\KebunImport;
 use App\Imports\RekapImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -19,24 +20,40 @@ class ExcelController extends Controller
 
     public function import(Request $request)
     {
+        $jenis = $request->jenis_rekap;
+        // dd($jenis);
+        if($jenis == 'kebun'){
+            $datas = Excel::toArray(new KebunImport, $request->file('excel'));
+        }else{
+            $datas = Excel::toArray(new RekapImport, $request->file('excel'));
+            $jenis = 'UM/PELUNASAN/PPN CPO';
+        }
         // dd($request->all());
-        $datas = Excel::toArray(new RekapImport, $request->file('excel'));
+        
         $new = Arr::except($datas[0], [0]);
-        $collections = collect($new)->groupBy([23]);
+        $collections = collect($new)->groupBy([0, 23]);
+        // dd($collections);
         $data = [];
         foreach($collections as $key => $collect){
+            $values = [];
+            foreach($collect as $a => $val){
+                $values[] = [
+                    'btd_number' => $a,
+                    'amount' => (int) Str::after($val[count($val)-1][10], '-'),
+                    'due_date' => Carbon::parse(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($val[0][8]))->format('d/n/Y')
+                ];
+            }
             $data[] = [
-                'btd_number' => $key,
-                'amount' => (int) Str::after($collect[count($collect)-1][10], '-'),
-                'due_date' => Carbon::parse(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($collect[0][8]))->format('d/n/Y')
+                'company_code' => $key,
+                'data' => $values,
+                'jumlah_data' => count($values),
+                'jenis_rekap' => $jenis
             ];
         }
-
+        // dd($data);
         $name_file = $request->file('excel')->getClientOriginalName();
-        $name_file = Str::after($name_file, 'TINA_');
-        $export = new RekapExport($data, count($data));
+        // $name_file = Str::after($name_file, 'TINA_');
+        $export = new RekapExport($data, $jenis);
         return Excel::download($export, 'Rekap_'.$name_file.'.xlsx');
-        // dd($data, count($data));
-        // return view('excel.tampil', ['data' => $data, 'jumlah_data'=>count($data)]);
     }
 }
