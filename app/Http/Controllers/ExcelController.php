@@ -30,7 +30,10 @@ class ExcelController extends Controller
             foreach($collections as $key => $collect){
                 $values = [];
                 foreach($collect as $a => $val){
-                    $values[] = [
+                    $amount = (int) Str::after($val[count($val)-1][10], '-');
+                    $amount = $this->cek_nominal($amount);
+                    // dd($amount);
+                    $values[$amount][] = [
                         'btd_number' => $a,
                         'amount' => (int) Str::after($val[count($val)-1][10], '-'),
                         'due_date' => Carbon::parse(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($val[0][8]))->format('d/n/Y')
@@ -50,7 +53,10 @@ class ExcelController extends Controller
             $jenis = 'UM/PELUNASAN/PPN CPO';
             $values = [];
             foreach($collections as $key => $collect){
-                $values[] = [
+                $amount = (int) Str::after($collect[count($collect)-1][10], '-');
+                $amount = $this->cek_nominal($amount);
+                // dd($amount);
+                $values[$amount][] = [
                     'btd_number' => $key,
                     'amount' => (int) Str::after($collect[count($collect)-1][10], '-'),
                     'due_date' => Carbon::parse(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($collect[0][8]))->format('d/n/Y'),
@@ -68,5 +74,16 @@ class ExcelController extends Controller
         // $name_file = Str::after($name_file, 'TINA_');
         $export = new RekapExport($data, $jenis);
         return Excel::download($export, 'Rekap_'.$name_file.'.xlsx');
+    }
+
+    public function cek_nominal($amount)
+    {
+        if($amount <200000000 && $amount >0){
+            return 'kurang 200 juta';
+        }else if($amount < 1000000000){
+            return '200 juta - 1 milyar';
+        }else{
+            return 'diatas 1 milyar';
+        }
     }
 }

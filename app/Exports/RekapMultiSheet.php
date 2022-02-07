@@ -18,9 +18,11 @@ class RekapMultiSheet implements FromView, WithStyles, WithTitle
     protected $jumlah_data;
     protected $jenis_rekap;
     protected $company_code;
+    protected $a;
     // protected $jumlah_company;
-    public function __construct(int $company_code, array $data, int $jumlah_data, string $jenis_rekap)
+    public function __construct(int $company_code, array $data, int $jumlah_data, string $jenis_rekap, $a)
     {
+        $this->a = $a;
         $this->data = $data;
         $this->jumlah_data = $jumlah_data;
         $this->jenis_rekap = $jenis_rekap;
@@ -75,9 +77,9 @@ class RekapMultiSheet implements FromView, WithStyles, WithTitle
     {
 
         if($this->company_code === 0){
-            return date('dmY');
+            return $this->a;
         }else{
-            return 'company code_'.$this->company_code;
+            return $this->company_code.'_'.$this->a;
         }
     }
 }

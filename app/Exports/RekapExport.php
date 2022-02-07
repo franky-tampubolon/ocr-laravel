@@ -76,11 +76,21 @@ class RekapExport implements WithMultipleSheets
         $sheets = [];
 
         if($this->jenis_rekap === 'kebun'){
+            // dd($this->data);
             foreach($this->data as $key => $data){
-                    $sheets[] = new RekapMultiSheet($data['company_code'], $data['data'], $data['jumlah_data'], $this->jenis_rekap);
+                foreach($data['data'] as $a => $b){
+                    $sheets[] = new RekapMultiSheet($data['company_code'], $b, count($b), $this->jenis_rekap, $a);
+                }
             }
         }else{
-            $sheets[] = new RekapMultiSheet($this->data[0]['company_code'], $this->data[0]['data'], $this->data[0]['jumlah_data'], $this->jenis_rekap);
+            foreach($this->data as $key => $data){
+                // dd($data);
+                foreach($data['data'] as $a => $b){
+
+                    // dd($b);
+                    $sheets[] = new RekapMultiSheet($data['company_code'], $b, count($b), $this->jenis_rekap, $a);
+                }
+            }
         }
         return $sheets;
     }
