@@ -50,6 +50,7 @@
                                 <select class="form-control" id="jenis_rekap" name="jenis_rekap">
                                     <option value="kebun">Rekap Kebun</option>
                                     <option value="cpo">Rekap CPO</option>
+                                    <option value="vendor">Rekap Vendor</option>
                                 </select>
                             </div>
                             <div class="form-group">

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DealslipController;
 use App\Http\Controllers\ExcelController;
+use App\Http\Controllers\RekapBaruController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OcrController;
 use App\Http\Controllers\PdfToImageController;
@@ -30,7 +31,9 @@ Route::post('deal-slip', [DealslipController::class, 'save'])->name('dealslip.sa
 Route::post('deal-slip/tampil', [DealslipController::class, 'tampil'])->name('dealslip.tampil');
 
 Route::get('excel', [ExcelController::class, 'index'])->name('excel.index');
-Route::post('excel', [ExcelController::class, 'import'])->name('excel.import');
+// Route::post('excel', [ExcelController::class, 'import'])->name('excel.import');
+// Route::get('excel', [RekapBaruController::class, 'index'])->name('excel.index');
+Route::post('excel', [RekapBaruController::class, 'import'])->name('excel.import');
 
 Route::get('/pdf', [PdfToImageController::class, 'index']);
 
