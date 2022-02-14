@@ -31,7 +31,7 @@ class RekapBaruExport implements WithStyles, WithTitle
         {
             $j = $row+1;
             $sheet->getStyle('A'.$row.':A'.$j)->getFont()->setSize(11);
-            $sheet->getCell('A'.$row)->setValue($this->jenis); //baris 1       
+            $sheet->getCell('A'.$row)->setValue($this->jenis); //baris 1
             $row++; // baris 2
             $sheet->getCell('A'.$row)->setValue(date('d/n/Y'));
             $row++; //baris 3
@@ -132,6 +132,7 @@ class RekapBaruExport implements WithStyles, WithTitle
 
         }
         $sheet->getPageSetup()->setPrintArea('A1:K'.$row);
+        $sheet->getPageSetup()->setHorizontalCentered(true);
         $sheet->getPageSetup()->setFitToPage(true);
     }
 
@@ -139,5 +140,22 @@ class RekapBaruExport implements WithStyles, WithTitle
     {
 
         return date('dnY');
+    }
+
+    public function columnWidths(): array
+    {
+        return [
+            'A' => 15.71,
+            'B' => 15.15,
+            'C' => 10.71,
+            'D' => 8.87,
+            'E' => 8.87,
+            'F' => 8.87,
+            'G' => 8.87,
+            'H' => 8.87,
+            'I' => 8.87,
+            'J' => 8.87,
+            'K' => 8.87
+        ];
     }
 }
