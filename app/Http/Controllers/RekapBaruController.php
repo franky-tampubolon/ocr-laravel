@@ -104,13 +104,14 @@ class RekapBaruController extends Controller
 
     protected function import_vendor($file)
     {
+        // dd((int) number_format(2200000, 0, ',', '.'));
         $data = [];
         $datas = Excel::toArray(new RekapImport, $file);
         $new = Arr::except($datas[0], [0]);
         $collections = collect($new)->groupBy([23]);
-        // dd($collections);
         foreach($collections as $key => $row)
         {
+            // dd($row[0][0]);
             // cek HO atau tidak
             $ho = explode(',', $row[0][21])[0];
             if(strtoupper($ho) === 'HO'){
@@ -123,12 +124,13 @@ class RekapBaruController extends Controller
             }
 
             // cek PCA index 1
-            $company_code = (int) $row[0][0];
+            $company_code = $row[0][0];
             $pca = $row[0][1];
             $pca = $this->cek_pca($pca, $company_code);
 
             // cek nominal
             $amount = (int) Str::after($row[count($row)-1][10], '-');
+            // dd($amount);
             $amount = $this->cek_nominal($amount);
             if($amount === 'kurang 200 juta'){
                 // cek apakah PO atau tidak melalui Purchasing Document
@@ -140,14 +142,14 @@ class RekapBaruController extends Controller
                 $data[$map][$amount][$jenis_po][] = [
                     'warna_map' => $map,
                     'no_btd' => $key,
-                    'amount' => (int) Str::after($row[count($row)-1][10], '-'),
+                    'amount' => Str::after($row[count($row)-1][10], '-'),
                     'pca' => $pca .' - '.$jenis_po
                 ];
             }else{
                 $data[$map][$amount][] = [
                     'warna_map' => $map,
                     'no_btd' => $key,
-                    'amount' => (int) Str::after($row[count($row)-1][10], '-'),
+                    'amount' => Str::after($row[count($row)-1][10], '-'),
                     'pca' => $pca
                 ];
             }
@@ -198,81 +200,91 @@ class RekapBaruController extends Controller
         $now = Carbon::now();
         if($due_date ->lessThanOrEqualTo($now->addDays(1))){
             return 'Kuning' ; //bayar besok
-        }else if($due_date->greaterThanOrEqualTo($now->addDays(2))){
+        }else {
             return 'Hijau'; //bayar lusa ke atas
         }
     }
 
     protected function cek_pca($pca, $company_code)
     {
-        $Trading = [
-            'pca_code' => ['L', 'M', 'E'],
-            'comp_code' => [3300, 4600, 5200, 5300, 5400]
-        ];
-        $Surabaya = [
-            'pca_code' => ['R124', 'P201', 'C201', 'P206', 'C206'],
-            'comp_code' => [3300]
-        ];
-        $Marunda = [
-            'pca_code' => ['R120', 'P200', 'C200', 'P205', 'C205'],
-            'comp_code' => [3300]
-        ];
-        $Medan = [
-            'pca_code' => ['P202', 'C202', 'P207', 'C207'],
-            'comp_code' => [3300]
-        ];
-        // $Consumer = ['C203'];
-        $Tarjun = [
-            'pca_code' => ['R130'],
-            'comp_code' => [3300]
-        ];
-        $Sbe = [
-            'pca_code' =>['E100', 'R521'],
-            'comp_code' => ['AA00']
-        ];
-        $kmi = [
-            'pca_code' =>[],
-            'comp_code' => ['AB00']
-        ];
-        $bap = [
-            'pca_code' =>['R'],
-            'comp_code' => [5400]
-        ];
-        $imt = [
-            'pca_code' =>['R'],
-            'comp_code' => [5200]
-        ];
-        $sip = [
-            'pca_code' =>['R'],
-            'comp_code' => [4600]
-        ];
-        $tapian = [
-            'pca_code' =>['R'],
-            'comp_code' => [5300]
-        ];
+        
 
         // untuk SOCI
-        if($company_code === 5600){
+        if((int) $company_code === 5600){
             return 'SOCI';
         }
-        if($company_code === 5500){
+        // untuk OSM
+        if((int) $company_code === 5500){
             return 'OSM';
         }
 
-        if(in_array(substr($pca,0,1), $Trading)){
+        // untuk Trading
+        if(in_array((int) $company_code, [3300, 4600, 5200, 5300, 5400]) && in_array(substr($pca,0,1), ['L', 'M', 'E'])){
             return 'Trading';
-        }else if(in_array($pca, $Surabaya)){
+        }
+        // surabaya
+        if((int) $company_code === 3300 && in_array($pca, ['R124', 'P201', 'C201', 'P206', 'C206'])){
             return 'Surabaya';
-        }else if(in_array($pca, $Marunda)){
+        }
+        // Marunda
+        if((int) $company_code === 3300 && in_array($pca, ['R120', 'P200', 'C200', 'P205', 'C205'])){
             return 'Marunda';
-        }else if(in_array($pca, $Medan)){
+        }
+        // Medan
+        if((int) $company_code === 3300 && in_array($pca, ['P202', 'C202', 'P207', 'C207'])){
             return 'Medan';
-        }else if(in_array($pca, $Consumer)){
+        }
+        // Consumer
+        if((int) $company_code === 3300 && in_array($pca, ['C203'])){
             return 'Consumer';
-        }else if(in_array($pca, $Tarjun)){
+        }
+        // Tarjun
+        if((int) $company_code === 3300 && in_array($pca, ['R130', 'R230'])){
             return 'Tarjun';
-        }else if(in_array($pca, $Sbe)){
+        }
+        // Belawan
+        if((int) $company_code === 3300 && in_array($pca, ['R110', 'R210', 'R310'])){
+            return 'Belawan';
+        }
+        // IMT
+        if((int) $company_code === 5200 && in_array(substr($pca,0,1), ['R'])){
+            return 'Imt';
+        }
+        // SIP
+        if((int) $company_code === 4600 && in_array(substr($pca,0,1), ['R'])){
+            return 'Sip';
+        }
+        // SBE
+        if($company_code === 'AA00'){
             return 'Sbe';
         }
+        // KMI
+        if($company_code === 'AB00'){
+            return 'Kmi';
+        }
+        // BAP
+        if((int) $company_code === 5300 && in_array(substr($pca,0,1), ['R'])){
+            return 'Bap';
+        }
+        // TAPIAN
+        if((int) $company_code === 5400 && in_array(substr($pca,0,1), ['R'])){
+            return 'Tapian';
+        }
+
+        // if(in_array(substr($pca,0,1), $Trading)){
+        //     return 'Trading';
+        // }else if(in_array($pca, $Surabaya)){
+        //     return 'Surabaya';
+        // }else if(in_array($pca, $Marunda)){
+        //     return 'Marunda';
+        // }else if(in_array($pca, $Medan)){
+        //     return 'Medan';
+        // }else if(in_array($pca, $Consumer)){
+        //     return 'Consumer';
+        // }else if(in_array($pca, $Tarjun)){
+        //     return 'Tarjun';
+        // }else if(in_array($pca, $Sbe)){
+        //     return 'Sbe';
+        // }
     }
 }

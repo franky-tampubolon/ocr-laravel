@@ -51,7 +51,7 @@ class VendorExport implements WithTitle, WithStyles, WithColumnWidths
                 $sheet->getStyle('A'.$row.':E'.$row)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
                 $sheet->getRowDimension($row)->setRowHeight(32);
                 $sheet->getCell('B'.$row)->setValue($b['no_btd']);
-                $sheet->getCell('C'.$row)->setValue(number_format($b['amount'], 0, ',', '.'));
+                $sheet->getCell('C'.$row)->setValue(number_format($b['amount']));
                 $sheet->getCell('D'.$row)->setValue(Str::upper($b['pca']));
                 $sheet->getCell('E'.$row)->setValue(Str::upper($b['warna_map']));
                 $row++; //cetak baris selanjutnya
