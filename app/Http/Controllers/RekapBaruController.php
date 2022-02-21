@@ -178,8 +178,21 @@ class RekapBaruController extends Controller
         }
 
         // dd(15%7);
-        // dd($new_data);
-        return $new_data;
+        $final_array = [];
+        foreach($new_data as $data)
+        {
+            if(count($data) > 5){
+                $x = array_chunk($data, 5, true);
+                foreach($x as $y){
+                    $final_array[] = $y;
+                }
+                
+            }else{
+                $final_array[] = $data;
+            }
+        }
+        // dd($final_array);
+        return $final_array;
     }
 
     protected function export_excel($data, $jenis, $name_file)
