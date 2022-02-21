@@ -139,14 +139,14 @@ class RekapBaruController extends Controller
                 }else{
                     $jenis_po = 'Non PO';
                 }
-                $data[$map][$amount][$jenis_po][] = [
+                $data[$company_code][$map][$amount][$jenis_po][] = [
                     'warna_map' => $map,
                     'no_btd' => $key,
                     'amount' => Str::after($row[count($row)-1][10], '-'),
                     'pca' => $pca 
                 ];
             }else{
-                $data[$map][$amount][] = [
+                $data[$company_code][$map][$amount][] = [
                     'warna_map' => $map,
                     'no_btd' => $key,
                     'amount' => Str::after($row[count($row)-1][10], '-'),
@@ -156,23 +156,28 @@ class RekapBaruController extends Controller
         }
         // dd($data);
         $new_data = [];
-        foreach($data as $warna => $a)
+        foreach($data as $comp_code => $a)
         {
-            // dd($a);
-            foreach($a as $nominal => $b)
+            
+            foreach($a as $warna => $b)
             {
-
-                if($nominal === 'kurang 200 juta'){
-                    foreach($b as $po => $c)
-                    {
+                // dd($nominal);
+                foreach($b as $nominal => $c)
+                {
+                    if($nominal === 'kurang 200 juta'){
+                        foreach($c as $po => $d)
+                        {
+                            $new_data[] = $d;
+                        }
+                    }else{
                         $new_data[] = $c;
                     }
-                }else{
-                    $new_data[] = $b;
                 }
 
             }
         }
+
+        // dd(15%7);
         // dd($new_data);
         return $new_data;
     }
