@@ -143,7 +143,7 @@ class RekapBaruController extends Controller
                     'warna_map' => $map,
                     'no_btd' => $key,
                     'amount' => Str::after($row[count($row)-1][10], '-'),
-                    'pca' => $pca .' - '.$jenis_po
+                    'pca' => $pca 
                 ];
             }else{
                 $data[$map][$amount][] = [
