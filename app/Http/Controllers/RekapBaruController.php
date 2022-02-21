@@ -16,7 +16,7 @@ class RekapBaruController extends Controller
 {
     public function import(Request $request)
     {
-        
+
         $jenis = $request->jenis_rekap;
         if($jenis === 'kebun')
         {
@@ -159,7 +159,7 @@ class RekapBaruController extends Controller
             // dd($a);
             foreach($a as $nominal => $b)
             {
-                
+
                 if($nominal === 'kurang 200 juta'){
                     foreach($b as $po => $c)
                     {
@@ -168,7 +168,7 @@ class RekapBaruController extends Controller
                 }else{
                     $new_data[] = $b;
                 }
-                
+
             }
         }
         // dd($new_data);
@@ -201,21 +201,62 @@ class RekapBaruController extends Controller
         }else if($due_date->greaterThanOrEqualTo($now->addDays(2))){
             return 'Hijau'; //bayar lusa ke atas
         }
-    }   
+    }
 
-    protected function cek_pca($pca, int $company_code)
+    protected function cek_pca($pca, $company_code)
     {
-        $Trading = ['L', 'M', 'E'];
-        $Surabaya = ['R124', 'P201', 'C201', 'P206', 'C206'];
-        $Marunda = ['R120', 'P200', 'C200', 'P205', 'C205'];
-        $Medan = ['P202', 'C202', 'P207', 'C207'];
-        $Consumer = ['C203'];
-        $Tarjun = ['R130'];
-        $Sbe = ['E100', 'R521'];
+        $Trading = [
+            'pca_code' => ['L', 'M', 'E'],
+            'comp_code' => [3300, 4600, 5200, 5300, 5400]
+        ];
+        $Surabaya = [
+            'pca_code' => ['R124', 'P201', 'C201', 'P206', 'C206'],
+            'comp_code' => [3300]
+        ];
+        $Marunda = [
+            'pca_code' => ['R120', 'P200', 'C200', 'P205', 'C205'],
+            'comp_code' => [3300]
+        ];
+        $Medan = [
+            'pca_code' => ['P202', 'C202', 'P207', 'C207'],
+            'comp_code' => [3300]
+        ];
+        // $Consumer = ['C203'];
+        $Tarjun = [
+            'pca_code' => ['R130'],
+            'comp_code' => [3300]
+        ];
+        $Sbe = [
+            'pca_code' =>['E100', 'R521'],
+            'comp_code' => ['AA00']
+        ];
+        $kmi = [
+            'pca_code' =>[],
+            'comp_code' => ['AB00']
+        ];
+        $bap = [
+            'pca_code' =>['R'],
+            'comp_code' => [5400]
+        ];
+        $imt = [
+            'pca_code' =>['R'],
+            'comp_code' => [5200]
+        ];
+        $sip = [
+            'pca_code' =>['R'],
+            'comp_code' => [4600]
+        ];
+        $tapian = [
+            'pca_code' =>['R'],
+            'comp_code' => [5300]
+        ];
 
         // untuk SOCI
         if($company_code === 5600){
             return 'SOCI';
+        }
+        if($company_code === 5500){
+            return 'OSM';
         }
 
         if(in_array(substr($pca,0,1), $Trading)){
