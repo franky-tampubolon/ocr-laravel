@@ -16,10 +16,12 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 class VendorExport implements WithTitle, WithStyles, WithColumnWidths
 {
     protected $data;
+    protected $name_file;
 
-    public function __construct(array $data)
+    public function __construct(array $data, string $name_file)
     {
         $this->data = $data;
+        $this->name_file = $name_file;
     }
 
     public function styles(WorkSheet $sheet)
@@ -28,7 +30,11 @@ class VendorExport implements WithTitle, WithStyles, WithColumnWidths
         $row = 1;
         foreach($data as $warna => $value)
         {
-            
+            $sheet->getCell('A'.$row)->setValue('nama file : ');
+            $sheet->getStyle('A'.$row)->getFont()->setSize(10);
+            $sheet->getCell('B'.$row)->setValue($this->name_file);
+            $sheet->getStyle('B'.$row)->getFont()->setSize(10);
+            $row++;
             $sheet->getStyle('A'.$row.':E'.$row)->getFont()->setSize(12);
             $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setWrapText(true);                
             $sheet->getStyle('A'.$row.':E'.$row)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER);
@@ -42,7 +48,7 @@ class VendorExport implements WithTitle, WithStyles, WithColumnWidths
             $sheet->getCell('D'.$row)->setValue('PCA');
             $sheet->getCell('E'.$row)->setValue('WARNA MAP');
 
-            $row++; //baris ke 2
+            $row++; //baris ke 3
             foreach($value as $nominal => $b){
                 $sheet->getStyle('A'.$row.':E'.$row)->getFont()->setSize(12);
                 $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setWrapText(true);
@@ -70,6 +76,7 @@ class VendorExport implements WithTitle, WithStyles, WithColumnWidths
             $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setHorizontal('center');
             $sheet->getStyle('A'.$row.':E'.$row)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
             $sheet->getRowDimension($row)->setRowHeight(32);
+            $row++;
             $row++;
             
         }

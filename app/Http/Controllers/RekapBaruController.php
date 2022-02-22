@@ -32,7 +32,6 @@ class RekapBaruController extends Controller
             $export = new VendorExport($data, $name_file);
             return Excel::download($export, 'Rekap_'.$name_file.'.xlsx');
         }
-        // dd($data);
         $new_data = [];
         foreach($data as $values)
         {
@@ -41,7 +40,6 @@ class RekapBaruController extends Controller
                 $new_data[] = $value;
             }
         }
-        // dd($new_data);
         $name_file = $request->file('excel')->getClientOriginalName();
         return $this->export_excel($new_data, $jenis, $name_file);
 
@@ -104,7 +102,6 @@ class RekapBaruController extends Controller
 
     protected function import_vendor($file)
     {
-        // dd((int) number_format(2200000, 0, ',', '.'));
         $data = [];
         $datas = Excel::toArray(new RekapImport, $file);
         $new = Arr::except($datas[0], [0]);
@@ -130,7 +127,6 @@ class RekapBaruController extends Controller
 
             // cek nominal
             $amount = (int) Str::after($row[count($row)-1][10], '-');
-            // dd($amount);
             $amount = $this->cek_nominal($amount);
             if($amount === 'kurang 200 juta'){
                 // cek apakah PO atau tidak melalui Purchasing Document
@@ -154,7 +150,6 @@ class RekapBaruController extends Controller
                 ];
             }
         }
-        // dd($data);
         $new_data = [];
         foreach($data as $comp_code => $a)
         {
@@ -176,8 +171,6 @@ class RekapBaruController extends Controller
 
             }
         }
-
-        // dd(15%7);
         $final_array = [];
         foreach($new_data as $data)
         {
@@ -191,7 +184,6 @@ class RekapBaruController extends Controller
                 $final_array[] = $data;
             }
         }
-        // dd($final_array);
         return $final_array;
     }
 
@@ -288,21 +280,5 @@ class RekapBaruController extends Controller
         if((int) $company_code === 5400 && in_array(substr($pca,0,1), ['R'])){
             return 'Tapian';
         }
-
-        // if(in_array(substr($pca,0,1), $Trading)){
-        //     return 'Trading';
-        // }else if(in_array($pca, $Surabaya)){
-        //     return 'Surabaya';
-        // }else if(in_array($pca, $Marunda)){
-        //     return 'Marunda';
-        // }else if(in_array($pca, $Medan)){
-        //     return 'Medan';
-        // }else if(in_array($pca, $Consumer)){
-        //     return 'Consumer';
-        // }else if(in_array($pca, $Tarjun)){
-        //     return 'Tarjun';
-        // }else if(in_array($pca, $Sbe)){
-        //     return 'Sbe';
-        // }
     }
 }
