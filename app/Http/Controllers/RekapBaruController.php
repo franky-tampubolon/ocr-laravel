@@ -108,10 +108,15 @@ class RekapBaruController extends Controller
         $collections = collect($new)->groupBy([23]);
         foreach($collections as $key => $row)
         {
+            // cek PCA index 1
+            $company_code = $row[0][0];
+            $pca = $row[0][1];
+            $pca = $this->cek_pca($pca, $company_code);
+
             // dd($row[0][0]);
             // cek HO atau tidak
             $ho = explode(',', $row[0][21])[0];
-            if(strtoupper($ho) === 'HO'){
+            if(strtoupper($ho) === 'HO' || ((int) $company_code === 3300 && substr($pca,0,1) === 'H')){
                 // echo $ho;
                 $map = 'Biru';
             }else{
@@ -120,10 +125,7 @@ class RekapBaruController extends Controller
                 // dd($map);
             }
 
-            // cek PCA index 1
-            $company_code = $row[0][0];
-            $pca = $row[0][1];
-            $pca = $this->cek_pca($pca, $company_code);
+            
 
             // cek nominal
             $amount = (int) Str::after($row[count($row)-1][10], '-');
@@ -135,14 +137,14 @@ class RekapBaruController extends Controller
                 }else{
                     $jenis_po = 'Non PO';
                 }
-                $data[$company_code][$map][$amount][$jenis_po][] = [
+                $data[$pca][$map][$amount][$jenis_po][] = [
                     'warna_map' => $map,
                     'no_btd' => $key,
                     'amount' => Str::after($row[count($row)-1][10], '-'),
                     'pca' => $pca 
                 ];
             }else{
-                $data[$company_code][$map][$amount][] = [
+                $data[$pca][$map][$amount][] = [
                     'warna_map' => $map,
                     'no_btd' => $key,
                     'amount' => Str::after($row[count($row)-1][10], '-'),
@@ -150,8 +152,9 @@ class RekapBaruController extends Controller
                 ];
             }
         }
+        // dd($data);
         $new_data = [];
-        foreach($data as $comp_code => $a)
+        foreach($data as $pca => $a)
         {
             
             foreach($a as $warna => $b)
@@ -171,6 +174,7 @@ class RekapBaruController extends Controller
 
             }
         }
+        // dd($new_data);
         $final_array = [];
         foreach($new_data as $data)
         {
@@ -184,6 +188,7 @@ class RekapBaruController extends Controller
                 $final_array[] = $data;
             }
         }
+        // dd($final_array);
         return $final_array;
     }
 
@@ -259,6 +264,10 @@ class RekapBaruController extends Controller
         // IMT
         if((int) $company_code === 5200 && in_array(substr($pca,0,1), ['R'])){
             return 'Imt';
+        }
+        // HO
+        if((int) $company_code === 3300 && in_array(substr($pca,0,1), ['H'])){
+            return 'HO';
         }
         // SIP
         if((int) $company_code === 4600 && in_array(substr($pca,0,1), ['R'])){
