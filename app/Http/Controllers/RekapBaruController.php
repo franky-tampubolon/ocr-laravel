@@ -179,7 +179,7 @@ class RekapBaruController extends Controller
         foreach($new_data as $data)
         {
             if(count($data) > 5){
-                $x = array_chunk($data, 5, true);
+                $x = array_chunk($data, 8, true);
                 foreach($x as $y){
                     $final_array[] = $y;
                 }
