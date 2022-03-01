@@ -16,7 +16,6 @@ class RekapBaruController extends Controller
 {
     public function import(Request $request)
     {
-
         $jenis = $request->jenis_rekap;
         if($jenis === 'kebun')
         {
@@ -116,7 +115,7 @@ class RekapBaruController extends Controller
             // dd($row[0][0]);
             // cek HO atau tidak
             $ho = explode(',', $row[0][21])[0];
-            if(strtoupper($ho) === 'HO' || ((int) $company_code === 3300 && substr($pca,0,1) === 'H')){
+            if(strtoupper($ho) === 'HO'){
                 // echo $ho;
                 $map = 'Biru';
             }else{
@@ -222,8 +221,6 @@ class RekapBaruController extends Controller
 
     protected function cek_pca($pca, $company_code)
     {
-        
-
         // untuk SOCI
         if((int) $company_code === 5600){
             return 'SOCI';
