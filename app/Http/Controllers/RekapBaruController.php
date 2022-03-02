@@ -30,7 +30,7 @@ class RekapBaruController extends Controller
 
             $jenis = 'Vendor';
             $name_file = $request->file('excel')->getClientOriginalName();
-            $export = new VendorExport($data, $name_file);
+            $export = new VendorExport($data, 'Rekap_'.$name_file);
             return Excel::download($export, 'Rekap_'.$name_file.'.xlsx');
         }
         $new_data = [];
