@@ -12,6 +12,7 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 
 class VendorExport implements WithTitle, WithStyles, WithColumnWidths
 {
@@ -37,7 +38,6 @@ class VendorExport implements WithTitle, WithStyles, WithColumnWidths
             $row++;
             $sheet->getStyle('A'.$row.':E'.$row)->getFont()->setSize(12);
             $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setWrapText(true);                
-            $sheet->getStyle('A'.$row.':E'.$row)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER);
             $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setVertical('center');
             $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setHorizontal('center');
             $sheet->getStyle('A'.$row.':E'.$row)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
@@ -52,13 +52,14 @@ class VendorExport implements WithTitle, WithStyles, WithColumnWidths
             foreach($value as $nominal => $b){
                 $sheet->getStyle('A'.$row.':E'.$row)->getFont()->setSize(12);
                 $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setWrapText(true);
-                $sheet->getStyle('A'.$row.':E'.$row)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER);
+                $sheet->getStyle('A'.$row.':B'.$row)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER);
+                $sheet->getStyle('D'.$row.':E'.$row)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER);
                 $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setVertical('center');
                 $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setHorizontal('center');
                 $sheet->getStyle('A'.$row.':E'.$row)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
                 $sheet->getRowDimension($row)->setRowHeight(32);
                 $sheet->getCell('B'.$row)->setValue($b['no_btd']);
-                $sheet->getCell('C'.$row)->setValue(number_format($b['amount']));
+                $sheet->setCellValueExplicit('C'.$row, $b['amount'], DataType::TYPE_STRING);
                 $sheet->getCell('D'.$row)->setValue(Str::upper($b['pca']));
                 $sheet->getCell('E'.$row)->setValue(Str::upper($b['warna_map']));
                 $row++; //cetak baris selanjutnya
@@ -78,7 +79,6 @@ class VendorExport implements WithTitle, WithStyles, WithColumnWidths
             $sheet->getRowDimension($row)->setRowHeight(32);
             $row++;
             $row++;
-            
         }
         $sheet->getPageSetup()->setPrintArea('A1:E'.$row);
         $sheet->getPageSetup()->setFitToPage(true);
@@ -94,6 +94,7 @@ class VendorExport implements WithTitle, WithStyles, WithColumnWidths
             'E' => 14          
         ];
     }
+
 
     public function title(): string
     {

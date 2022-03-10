@@ -11,11 +11,13 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class RekapBaruController extends Controller
 {
     public function import(Request $request)
     {
+        
         $jenis = $request->jenis_rekap;
         if($jenis === 'kebun')
         {
@@ -139,14 +141,14 @@ class RekapBaruController extends Controller
                 $data[$pca][$map][$amount][$jenis_po][] = [
                     'warna_map' => $map,
                     'no_btd' => $key,
-                    'amount' => Str::after($row[count($row)-1][10], '-'),
+                    'amount' => (string) number_format(Str::after($row[count($row)-1][10], '-'),0,',','.'),
                     'pca' => $pca 
                 ];
             }else{
                 $data[$pca][$map][$amount][] = [
                     'warna_map' => $map,
                     'no_btd' => $key,
-                    'amount' => Str::after($row[count($row)-1][10], '-'),
+                    'amount' => (string) number_format(Str::after($row[count($row)-1][10], '-'),0,',','.'),
                     'pca' => $pca
                 ];
             }

@@ -112,7 +112,7 @@ class RekapBaruExport implements WithStyles, WithTitle
                 $sheet->getStyle('A'.$row.':K'.$row)->getAlignment()->setHorizontal('center');
                 $sheet->getStyle('A'.$row.':K'.$row)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
                 $sheet->getCell('A'.$row)->setValue($baris['btd_number']);
-                $sheet->getCell('B'.$row)->setValue(number_format($baris['amount'], 0, ',', '.'));
+                $sheet->getCell('B'.$row)->setValue(number_format($baris['amount'],0,',','.'));
                 $sheet->getCell('C'.$row)->setValue($baris['due_date']);
                 $row++; //cetak baris selanjutnya
             }
