@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class RekapBaruController extends Controller
 {
@@ -28,9 +27,10 @@ class RekapBaruController extends Controller
             $jenis = 'UM/PELUNASAN/PPN CPO';
         }else{
             $data = $this->import_vendor($request->file('excel'));
+
             $jenis = 'Vendor';
             $name_file = $request->file('excel')->getClientOriginalName();
-            $export = new VendorExport($data, $name_file);
+            $export = new VendorExport($data, 'Rekap_'.$name_file);
             return Excel::download($export, 'Rekap_'.$name_file.'.xlsx');
         }
         $new_data = [];
@@ -50,6 +50,7 @@ class RekapBaruController extends Controller
     {
         $data = [];
         $datas = Excel::toArray(new KebunImport, $file);
+
         $new = Arr::except($datas[0], [0]);
         $collections = collect($new)->groupBy([0, 23]);
         foreach($collections as $key => $collect){
@@ -104,8 +105,9 @@ class RekapBaruController extends Controller
     protected function import_vendor($file)
     {
         $data = [];
-        $datas = Excel::toArray(new RekapImport, $file);
+        $datas = Excel::toCollection(new RekapImport, $file);
         $new = Arr::except($datas[0], [0]);
+        // dd($new);
         $collections = collect($new)->groupBy([23]);
         foreach($collections as $key => $row)
         {
@@ -116,8 +118,12 @@ class RekapBaruController extends Controller
 
             // dd($row[0][0]);
             // cek HO atau tidak
-            $ho = explode(',', $row[0][21])[0];
-            if(strtoupper($ho) === 'HO'){
+            // dd(Str::of($row[0][21])->contains('HO'));
+            // $ho = explode(',', $row[0][21])[0];
+            // dd($row[0][6]);
+            if(Str::of($row[0][6])->contains('EXP')){
+                $map = 'Hijau';
+            }else if(Str::of($row[0][21])->contains('HO')){
                 // echo $ho;
                 $map = 'Biru';
             }else{
@@ -125,8 +131,6 @@ class RekapBaruController extends Controller
                 $map = $this->cek_map($due_date);
                 // dd($map);
             }
-
-            
 
             // cek nominal
             $amount = (int) Str::after($row[count($row)-1][10], '-');
@@ -157,7 +161,7 @@ class RekapBaruController extends Controller
         $new_data = [];
         foreach($data as $pca => $a)
         {
-            
+
             foreach($a as $warna => $b)
             {
                 // dd($nominal);
@@ -184,7 +188,7 @@ class RekapBaruController extends Controller
                 foreach($x as $y){
                     $final_array[] = $y;
                 }
-                
+
             }else{
                 $final_array[] = $data;
             }
