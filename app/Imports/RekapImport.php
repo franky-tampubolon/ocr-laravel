@@ -5,7 +5,7 @@ namespace App\Imports;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 
-class RekapImport implements ToCollection
+class RekapImport extends DefaultValueBinder implements ToCollection
 {
     /**
     * @param Collection $collection
@@ -14,4 +14,5 @@ class RekapImport implements ToCollection
     {
         //
     }
+
 }

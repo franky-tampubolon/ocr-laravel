@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class RekapBaruController extends Controller
 {
