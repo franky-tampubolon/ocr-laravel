@@ -11,12 +11,12 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class RekapBaruController extends Controller
 {
     public function import(Request $request)
     {
-        
         $jenis = $request->jenis_rekap;
         if($jenis === 'kebun')
         {
@@ -115,12 +115,6 @@ class RekapBaruController extends Controller
             $company_code = $row[0][0];
             $pca = $row[0][1];
             $pca = $this->cek_pca($pca, $company_code);
-
-            // dd($row[0][0]);
-            // cek HO atau tidak
-            // dd(Str::of($row[0][21])->contains('HO'));
-            // $ho = explode(',', $row[0][21])[0];
-            // dd($row[0][6]);
             if(Str::of($row[0][6])->contains('EXP')){
                 $map = 'Hijau';
             }else if(Str::of($row[0][21])->contains('HO')){
@@ -218,11 +212,16 @@ class RekapBaruController extends Controller
     protected function cek_map($due_date)
     {
         $now = Carbon::now();
-        if($due_date ->lessThanOrEqualTo($now->addDays(1))){
-            return 'Kuning' ; //bayar besok
-        }else {
-            return 'Hijau'; //bayar lusa ke atas
+        if($now->dayOfWeek === Carbon::FRIDAY && $due_date->dayOfWeek === Carbon::MONDAY){
+            return 'Kuning';
+        }else{
+            if($due_date->lessThanOrEqualTo($now->addDays(1))){
+                return 'Kuning' ; //bayar besok
+            }else {
+                return 'Hijau'; //bayar lusa ke atas
+            }
         }
+        
     }
 
     protected function cek_pca($pca, $company_code)
