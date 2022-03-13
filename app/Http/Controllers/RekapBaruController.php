@@ -11,6 +11,10 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Color;
 
 class RekapBaruController extends Controller
 {
@@ -103,6 +107,8 @@ class RekapBaruController extends Controller
 
     protected function import_vendor($file)
     {
+
+
         $data = [];
         $datas = Excel::toCollection(new RekapImport, $file);
         $new = Arr::except($datas[0], [0]);
@@ -139,7 +145,7 @@ class RekapBaruController extends Controller
                     'warna_map' => $map,
                     'no_btd' => $key,
                     'amount' => (string) number_format(Str::after($row[count($row)-1][10], '-'),0,',','.'),
-                    'pca' => $pca 
+                    'pca' => $pca
                 ];
             }else{
                 $data[$pca][$map][$amount][] = [
@@ -220,7 +226,7 @@ class RekapBaruController extends Controller
                 return 'Hijau'; //bayar lusa ke atas
             }
         }
-        
+
     }
 
     protected function cek_pca($pca, $company_code)
@@ -243,7 +249,7 @@ class RekapBaruController extends Controller
             return 'Surabaya';
         }
         // Marunda
-        if((int) $company_code === 3300 && in_array($pca, ['R120', 'P200', 'C200', 'P205', 'C205'])){
+        if((int) $company_code === 3300 && in_array($pca, ['R120', 'R320', 'P200', 'C200', 'P205', 'C205'])){
             return 'Marunda';
         }
         // Medan
@@ -255,7 +261,7 @@ class RekapBaruController extends Controller
             return 'Consumer';
         }
         // Tarjun
-        if((int) $company_code === 3300 && in_array($pca, ['R130', 'R230'])){
+        if((int) $company_code === 3300 && in_array($pca, ['R130', 'R230', 'R530'])){
             return 'Tarjun';
         }
         // Belawan
