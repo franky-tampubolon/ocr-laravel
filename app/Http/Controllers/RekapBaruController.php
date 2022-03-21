@@ -261,7 +261,7 @@ class RekapBaruController extends Controller
             return 'Consumer';
         }
         // Tarjun
-        if((int) $company_code === 3300 && in_array($pca, ['R130', 'R230', 'R530'])){
+        if((int) $company_code === 3300 && in_array($pca, ['R130', 'R230', 'R530', 'R232'])){
             return 'Tarjun';
         }
         // Belawan
