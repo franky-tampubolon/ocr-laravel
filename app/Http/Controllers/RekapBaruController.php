@@ -179,7 +179,7 @@ class RekapBaruController extends Controller
         $final_array = [];
         foreach($new_data as $data)
         {
-            if(count($data) > 5){
+            if(count($data) > 8){
                 $x = array_chunk($data, 8, true);
                 foreach($x as $y){
                     $final_array[] = $y;
@@ -238,7 +238,7 @@ class RekapBaruController extends Controller
         }
 
         // untuk Trading
-        if(in_array((int) $company_code, [3300, 4600, 5200, 5300, 5400]) && in_array(substr($pca,0,1), ['L', 'M', 'E'])){
+        if(in_array((int) $company_code, [3300, 4600, 5200, 5300, 5400]) && in_array(substr($pca,0,1), ['L', 'M', 'E', 'H'])){
             return 'Trading';
         }
         // surabaya
