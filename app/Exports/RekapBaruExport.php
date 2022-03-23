@@ -68,7 +68,7 @@ class RekapBaruExport implements WithStyles, WithTitle
             $sheet->getCell('E'.$row)->setValue('IN');
             $sheet->getCell('F'.$row)->setValue('OUT');
             $sheet->getCell('G'.$row)->setValue('IN QA jam MSIG');
-            $sheet->getCell('H'.$row)->setValue('OUT QA jam MSIG');
+            $sheet->getCell('H'.$row)->setValue('OUT QA jam SML');
             $sheet->getCell('I'.$row)->setValue('Received QA MSIG jam');
             // akhir header tabel
             $row++; //baris ke 5

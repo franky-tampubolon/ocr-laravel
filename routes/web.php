@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OcrController;
 use App\Http\Controllers\PdfToImageController;
 use App\Http\Controllers\UploadSoalController;
+use App\Http\Controllers\UpstreamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +21,16 @@ use App\Http\Controllers\UploadSoalController;
 */
 
 Route::get('/', function () {
-    return view('excel.index');
+    return view('home');
 });
+
+Route::get('upstream', function(){
+    return view('upstream.index');
+})->name('upstream');
+
+Route::get('downstream', function(){
+    return view('downstream.index');
+})->name('downstream');
 
 Route::post('ocr/hasil', [OcrController::class, 'hasil'])->name('ocr.hasil');
 Route::resource('ocr', OcrController::class);
@@ -30,10 +39,14 @@ Route::post('deal-slip/crop', [DealslipController::class, 'crop_image'])->name('
 Route::post('deal-slip', [DealslipController::class, 'save'])->name('dealslip.save');
 Route::post('deal-slip/tampil', [DealslipController::class, 'tampil'])->name('dealslip.tampil');
 
+
+
 Route::get('excel', [ExcelController::class, 'index'])->name('excel.index');
 // Route::post('excel', [ExcelController::class, 'import'])->name('excel.import');
 // Route::get('excel', [RekapBaruController::class, 'index'])->name('excel.index');
-Route::post('excel', [RekapBaruController::class, 'import'])->name('excel.import');
+Route::post('downstream/excel', [RekapBaruController::class, 'import'])->name('downstream.import');
+
+Route::post('upstream/excel', [UpstreamController::class, 'import'])->name('upstream.import');
 
 Route::get('/pdf', [PdfToImageController::class, 'index']);
 
