@@ -186,6 +186,8 @@ class UpstreamController extends Controller
             return 'PSM 5';
         }else if(in_array($sender_account, $psm7)){
             return 'PSM 7';
+        }else if(in_array($sender_account, $smart_ho)){
+            return 'SMART HO';
         }
     }
 }

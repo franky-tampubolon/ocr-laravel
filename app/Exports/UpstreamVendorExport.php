@@ -40,12 +40,12 @@ class UpstreamVendorExport implements WithTitle, WithStyles, WithColumnWidths
             $row++;
             $sheet->getStyle('A'.$row.':E'.$row)->getFont()->setName('Comic Sans MS');
             $sheet->getStyle('A'.$row.':E'.$row)->getFont()->setSize(20);
-            $sheet->getStyle('A'.$row.':E'.$row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+            $sheet->getStyle('A'.$row.':E'.$row)->getFill()->applyFromArray(['fillType' => 'solid', 'color' => ['rgb' => 'D9D9D9']]);
             $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setWrapText(true);
             $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setVertical('center');
             $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setHorizontal('center');
             $sheet->getStyle('A'.$row.':E'.$row)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-            $sheet->getRowDimension($row)->setRowHeight(117);
+            $sheet->getRowDimension($row)->setRowHeight(60);
             $sheet->getCell('A'.$row)->setValue('TANGGAL');
             $sheet->getCell('B'.$row)->setValue('PSM');
             $sheet->getCell('C'.$row)->setValue('NOMOR MAP');
@@ -107,7 +107,6 @@ class UpstreamVendorExport implements WithTitle, WithStyles, WithColumnWidths
             'E' => 22
         ];
     }
-
 
     public function title(): string
     {
