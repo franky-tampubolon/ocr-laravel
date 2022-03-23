@@ -67,13 +67,9 @@ class UpstreamVendorExport implements WithTitle, WithStyles, WithColumnWidths
                 $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setHorizontal('center');
                 $sheet->getStyle('A'.$row.':E'.$row)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
                 $sheet->getRowDimension($row)->setRowHeight(45);
-                if(count($value) > 1){
-                    $sheet->getCell('A'.$row)->setValue(Carbon::now()->isoFormat('d MMMM Y'));
-                    $sheet->getCell('B'.$row)->setValue(Str::upper($b['psm']));
-                }else{
-                    $sheet->getCell('A'.$row)->setValue(Carbon::now()->isoFormat('d MMMM Y'));
-                    $sheet->getCell('B'.$row)->setValue(Str::upper($b['psm']));
-                }
+                $sheet->getCell('A'.$row)->setValue(Carbon::now()->isoFormat('D MMMM Y'));
+                $sheet->getCell('B'.$row)->setValue(Str::upper($b['psm']));
+
                 $sheet->getCell('D'.$row)->setValue($b['no_btd']);
                 // $sheet->getCell('E'.$row)->setValue(Str::upper($b['warna_map']));
                 $sheet->setCellValueExplicit('E'.$row, $b['amount'], DataType::TYPE_STRING);
