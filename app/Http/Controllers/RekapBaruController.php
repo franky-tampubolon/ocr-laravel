@@ -237,8 +237,13 @@ class RekapBaruController extends Controller
             return 'OSM';
         }
 
+        // cek company code
+        if(in_array((int) $company_code, [4600, 5200, 5300, 5400]) && substr($pca,0,1) === 'H'){
+            return 'Trading';
+        }
+
         // untuk Trading
-        if(in_array((int) $company_code, [3300, 4600, 5200, 5300, 5400]) && in_array(substr($pca,0,1), ['L', 'M', 'E', 'H'])){
+        if(in_array((int) $company_code, [3300, 4600, 5200, 5300, 5400]) && in_array(substr($pca,0,1), ['L', 'M', 'E'])){
             return 'Trading';
         }
         // surabaya
