@@ -64,14 +64,14 @@ class UpstreamController extends Controller
                 $data[$psm][$amount][$jenis_po][] = [
                     // 'warna_map' => $map,
                     'no_btd' => $key,
-                    'amount' => (string) number_format( Str::after($row[count($row)-1][11], '-'),0,',','.'),
+                    'amount' => (string) number_format( Str::after($row[count($row)-1][11], '-'),0,'.',','),
                     'psm' => $psm
                 ];
             }else{
                 $data[$psm][$amount][] = [
                     // 'warna_map' => $map,
                     'no_btd' => $key,
-                    'amount' => (string) number_format(Str::after($row[count($row)-1][11], '-'),0,',','.'),
+                    'amount' => (string) number_format(Str::after($row[count($row)-1][11], '-'),0,'.',','),
                     'psm' => $psm
                 ];
             }
