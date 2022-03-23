@@ -53,11 +53,13 @@ class UpstreamVendorExport implements WithTitle, WithStyles, WithColumnWidths
             $sheet->getCell('E'.$row)->setValue('NOMINAL');
 
             $row++; //baris ke 3
+            $sheet->getCell('A'.$row)->setValue(Carbon::now()->isoFormat('D MMMM Y'));
+            $merge = $row + count($value)-1;
+            $sheet->mergeCells('A'.$row.':A'.$merge);
+            $sheet->mergeCells('B'.$row.':B'.$merge);
+            $sheet->mergeCells('C'.$row.':C'.$merge);
             foreach($value as $nominal => $b){
-                $merge = $row + count($value)-1;
-                $sheet->mergeCells('A'.$row.':A'.$merge);
-                $sheet->mergeCells('B'.$row.':B'.$merge);
-                $sheet->mergeCells('C'.$row.':C'.$merge);
+
                 $sheet->getStyle('A'.$row.':E'.$row)->getFont()->setSize(18);
                 $sheet->getStyle('A'.$row.':E'.$row)->getFont()->setName('Comic Sans MS');
                 $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setWrapText(true);
@@ -67,11 +69,8 @@ class UpstreamVendorExport implements WithTitle, WithStyles, WithColumnWidths
                 $sheet->getStyle('A'.$row.':E'.$row)->getAlignment()->setHorizontal('center');
                 $sheet->getStyle('A'.$row.':E'.$row)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
                 $sheet->getRowDimension($row)->setRowHeight(45);
-                $sheet->getCell('A'.$row)->setValue(Carbon::now()->isoFormat('D MMMM Y'));
                 $sheet->getCell('B'.$row)->setValue(Str::upper($b['psm']));
-
                 $sheet->getCell('D'.$row)->setValue($b['no_btd']);
-                // $sheet->getCell('E'.$row)->setValue(Str::upper($b['warna_map']));
                 $sheet->setCellValueExplicit('E'.$row, $b['amount'], DataType::TYPE_STRING);
                 $row++; //cetak baris selanjutnya
             }
